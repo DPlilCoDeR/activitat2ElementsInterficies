@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App extends Application {
 
@@ -34,6 +36,7 @@ public class App extends Application {
         TextField nomFieldT = new TextField();
         nomFieldT.setPromptText("Nom de l'Esdeveniment");
         root.add(nomFieldT,1,1);
+
 
         Label passField =  new Label("Password:");
         root.add(passField,0,2);
@@ -71,6 +74,7 @@ public class App extends Application {
         CheckBox cateringCheckBox = new CheckBox("Catering");
         CheckBox vipCheckBox = new CheckBox("Zona Vip");
         CheckBox hdCheckBox = new CheckBox("Enregistrament HD");
+        List<CheckBox> checkBoxes = List.of(cateringCheckBox, vipCheckBox, hdCheckBox);
         GridPane aditionalGrid = new GridPane();
         aditionalGrid.setPadding(new Insets(5));
         aditionalGrid.setHgap(10);
@@ -147,6 +151,69 @@ public class App extends Application {
         }
         root.add(desaMBtn,1,15,2,1);
         GridPane.setHalignment(desaMBtn, HPos.RIGHT);
+
+        //Alert
+
+
+
+        desaMBtn.setOnMouseClicked(e -> {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            String nom;
+            String tipusText = "";
+            String desc;
+            String color;
+            String recurso;
+            String data;
+            String categoria;
+            int entrades;
+            double descompte;
+
+            if(tipusGroup.getSelectedToggle() != null){
+                nom = nomFieldT.getText().trim();
+                desc = DescriptionField.getText().trim();
+                Toggle tipusSelect = tipusGroup.getSelectedToggle();
+                if(tipusSelect != null){
+                    RadioButton rb = (RadioButton) tipusSelect;
+                    tipusText = rb.getText().trim();
+                }
+                List<String> checkSelected = new ArrayList<>();
+                for (CheckBox check : checkBoxes){
+                    if (check.isSelected()){
+                        checkSelected.add(check.getText());
+                    }
+                }
+                recurso = menuButton.getText();
+                data = datePicker.getValue().toString();
+                categoria = choiceBox.getValue();
+                entrades = entraSpin.getValue();
+                descompte = sli.getValue();
+                color = colorPicker.getValue().toString();
+
+
+                String missatge = "Nom: " + nom + "\n"
+                        + "Description: " + desc + "\n"
+                        + "Tipus d'access: " + tipusText + "\n"
+                        + "Serveis: " + checkSelected + "\n"
+                        + "Recursos: " + recurso + "\n"
+                        + "Data: " + data + "\n"
+                        + "Categoria: " + categoria + "\n"
+                        + "Entrades: " + entrades + "\n"
+                        + "Descompte: " + descompte + "\n"
+                        + "Color Ticket: " + color + "\n";
+                alert.setHeaderText("Desar?");
+                alert.setTitle("Confirmacio");
+                alert.setContentText(missatge);
+            }
+
+
+
+
+
+
+            alert.showAndWait();
+        });
+
+
 
 
         Scene scene = new Scene(root,600,750);
